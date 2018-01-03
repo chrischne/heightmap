@@ -1,11 +1,6 @@
 var terrain;
 var img;
 
-var particles = [];
-
-var displayHeightmap = true;
-var displaySlopes = false;
-
 function preload() {
 	img = loadImage('assets/heighmap.png');
 }
@@ -15,6 +10,8 @@ function setup() {
 
 	var w = 768;
 	var h = 1024;
+
+	//anzahl zellen in der x richtung im vectorfield
 	var xResolution = 50;
 	terrain = createHeightmap(img, w, h, xResolution);
 
@@ -24,13 +21,9 @@ function setup() {
 function draw() {
 	background(255);
 
-	if (displayHeightmap) {
-		terrain.drawHeightmap();
-	}
-	if (displaySlopes) {
-		terrain.drawVectorField();
-	}
-
+	
+	terrain.drawHeightmap();
+	//terrain.drawVectorField();
 
 	//move particles
 	for (var i = 0; i < particles.length; i++) {
@@ -38,10 +31,8 @@ function draw() {
 
 		var slope = terrain.getSlope(p.x, p.y);
 
-
 		p.x += slope.x;
 		p.y += slope.y;
-
 	}
 
 	//draw particles
@@ -49,7 +40,6 @@ function draw() {
 	noStroke();
 	for (var i = 0; i < particles.length; i++) {
 		var p = particles[i];
-
 		ellipse(p.x, p.y, 3, 3);
 	}
 
@@ -59,30 +49,6 @@ function draw() {
 function mousePressed() {
 
 	var p = createVector(mouseX, mouseY);
-
 	particles.push(p);
 
-}
-
-function keyPressed() {
-
-	if (key == '1') {
-		displayHeightmap = !displayHeightmap;
-	}
-	else if (key == '2') {
-		displaySlopes = !displaySlopes;
-	}
-	else if (key == '3') {
-		spawnParticles();
-	}
-
-}
-
-function spawnParticles() {
-	var border= 10;
-	for (var i = 0; i < 100; i++) {
-
-		var p = createVector(random(border, width-border), random(border, height-border));
-		particles.push(p);
-	}
 }
