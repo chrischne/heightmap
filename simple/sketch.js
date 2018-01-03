@@ -1,6 +1,8 @@
 var terrain;
 var img;
 
+var particles = [];
+
 function preload() {
 	img = loadImage('assets/heighmap.png');
 }
