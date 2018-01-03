@@ -42,14 +42,14 @@ function createHeightmap(img, w, h, xRes) {
     }
 
     function calcSlopes3(im, xdim, ydim) {
-        console.log('calcSlopes2');
+        console.log('calcSlopes3');
         var vfield = create2DArray(xdim, ydim);
 
         im.loadPixels();
         var globalMaxDiff = -1000000;
         for (var i = 0; i < xdim; i++) {
             for (var j = 0; j < ydim; j++) {
-                console.log('i: ' + i + ' j: ' + j);
+                // console.log('i: ' + i + ' j: ' + j);
                 //get the center point of current cell
                 var cx = floor(i * cellSize + 0.5 * cellSize);
                 var cy = floor(j * cellSize + 0.5 * cellSize);
@@ -57,7 +57,7 @@ function createHeightmap(img, w, h, xRes) {
                 var off = (cy * im.width + cx) * 4;
                 var centerGrey = im.pixels[off];
 
-                console.log('centerGrey: ' + centerGrey);
+                //  console.log('centerGrey: ' + centerGrey);
                 maxDiff = -1000000;
                 var maxV = null;
 
@@ -130,7 +130,7 @@ function createHeightmap(img, w, h, xRes) {
                 var off = (cy * im.width + cx) * 4;
                 var centerGrey = im.pixels[off];
 
-                console.log('centerGrey: ' + centerGrey);
+                // console.log('centerGrey: ' + centerGrey);
                 maxDiff = -1000000;
                 var maxV = null;
 
@@ -208,7 +208,7 @@ function createHeightmap(img, w, h, xRes) {
                 var off = (cy * im.width + cx) * 4;
                 var centerGrey = im.pixels[off];
 
-                console.log('centerGrey: ' + centerGrey);
+                //  console.log('centerGrey: ' + centerGrey);
                 maxDiff = -1000000;
                 var maxV = null;
                 for (var k = 0; k < nrSamples; k++) {
@@ -219,7 +219,7 @@ function createHeightmap(img, w, h, xRes) {
                     var sampleY = floor(cx + v.y);
 
                     if (outOfBounds(sampleX, sampleY, im.width, im.height)) {
-                        console.log('out of bounds: ' + sampleX + ', ' + sampleY);
+                        //   console.log('out of bounds: ' + sampleX + ', ' + sampleY);
                         continue;
                     }
 
@@ -284,7 +284,7 @@ function createHeightmap(img, w, h, xRes) {
 
                 var x = i * cellSize;
                 var y = j * cellSize;
-                stroke(0);
+                stroke(0, 100);
                 rect(x, y, cellSize, cellSize);
 
                 var cx = x + 0.5 * cellSize;
@@ -308,6 +308,18 @@ function createHeightmap(img, w, h, xRes) {
             }
 
         }
+    }
+
+    hm.getSlope = function (x, y) {
+        var cellX = floor(x / cellSize);
+        var cellY = floor(y / cellSize);
+
+        if (cellX < 0 || cellX > nx - 1 || cellY < 0 || cellY > ny - 1) {
+            return createVector(0, 0);
+        }
+
+        var slope = vectorfield[cellX][cellY];
+        return slope.copy();
     }
 
     return hm;
